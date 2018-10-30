@@ -35,6 +35,12 @@ RUN apt-get update \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /etc/apt/sources.list.d/*
 
+# Before wrap up the agent startup, install Moby and its dependencies
+
+COPY install-moby.sh ./
+RUN /install-moby.sh
+
+# Go back to original startup.
 
 # Accept the TEE EULA
 RUN mkdir -p "/root/.microsoft/Team Foundation/4.0/Configuration/TEE-Mementos" \
