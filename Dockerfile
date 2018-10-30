@@ -1,4 +1,8 @@
-FROM ubuntu:$(UBUNTU_VERSION)
+FROM arm32v7/ubuntu:16.04
+
+ENV UBUNTU_RELEASE=xenial
+
+# Install the dependencies for the base DevOps Agent
 
 # To make it easier for build and release pipelines to run apt-get,
 # configure apt to not require confirmation (assume the -y argument by default)
@@ -25,13 +29,12 @@ RUN apt-get update \
         git \
         jq \
         libcurl3 \
-        libicu$(LIBICU_VERSION) \
+        libicu55 \
         libunwind8 \
         netcat \
- && curl -s https://packagecloud.io/install/repositories/github/git-lfs/script.deb.sh | bash \
- && apt-get install -y --no-install-recommends git-lfs \
  && rm -rf /var/lib/apt/lists/* \
  && rm -rf /etc/apt/sources.list.d/*
+
 
 # Accept the TEE EULA
 RUN mkdir -p "/root/.microsoft/Team Foundation/4.0/Configuration/TEE-Mementos" \
@@ -44,4 +47,3 @@ COPY ./start.sh .
 RUN chmod +x start.sh
 
 CMD ["./start.sh"]
-
